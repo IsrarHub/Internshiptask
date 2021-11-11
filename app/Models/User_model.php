@@ -14,10 +14,11 @@ class User_model extends Model
  
  protected $allowedFields=['user_id','book_id'];
 
-public function getBorrowedBooks(){
+public function getBorrowedBooks($user_id){
   $builder=$this->db->table('book_borrowed');
   $builder->join('books',' book_borrowed.book_id= books.book_id');
   $builder->join('admin',' book_borrowed.user_id= admin.id');
+  $builder->where('user_id',$user_id);
   $book=$builder->get()->getResult();
   return $book; 
 }
@@ -40,29 +41,11 @@ public function updateLimit($data,$user_id){
           ->delete();
    
      }
-     public function allBooks(){
-       return $this->db->table("books")->get()->getResult();
-
-         }
-         public function saveBook($data){
-           return $this->db->table('books')->insert($data);
-         }
-         public function findbook($id){
-          return $this->db->table('books')
-          ->where(['book_id'=>$id])
-          ->get()->getRow();
-         }
-         public function updateBook($id,$data){
-          return $this->db->table('books')
-          ->where(['book_id'=>$id])
-          ->update($data);
-         }
-         public function deleteBook($id){
-          return $this->db->table('books')
-          ->where(['book_id'=>$id])
-          ->delete();
-         }
-         public function getAllBooks(){
-          return $this->db->table('books')->get()->getResult();
-        }
+     
+     public function getAvialbebooks(){
+      return $this->db->table('books')
+      ->where('book_status',1)
+      ->get()->getResult();
+     }
+     
 }
